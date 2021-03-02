@@ -1,58 +1,115 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div v-for="(item, index) in aa" class="animate"  :key="item">
+      {{ item }}
+    <input></input>
+    </div>
+    <button class="" @click="changeid">新增一个元素</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  name: "HelloWorld",
+  data() {
+    return {
+      aa: ["A", "B", "C", "D", "E"],
+    };
+  },
+  mounted() {
+    const tre={
+      name:1,
+      c:[
+        {
+          name:2,
+          c:[{
+          name:"2-2",
+          c:[]
+        },]
+        },
+        {
+          name:3,
+          c:[{
+          name:"3-3",
+          c:[]
+        }]
+        },
+        {
+          name:4,
+          c:[{
+          name:"4-4",
+          c:[]
+        }]
+        },
+      ]
+    }
+    console.log(this.dfs(tre));
+    console.log(this.bfs(tre));
+    console.log("object :>> ");
+    setTimeout(() => {
+      //["A","B","C","D","E"]
+      //["F","A","B","C","D","E"]
+      // this.aa.unshift("F")
+      // this.aa.splice(2, 0, "F");
+
+      //["A","B","C","D","E"]
+      //["A","B","F","C","D","E"]
+      //this.aa.splice(2,0,"F")
+    }, 5000);
+  },
+  methods:{
+    changeid(){
+      console.log("zz");
+      this.aa.unshift(Math.random());
+      // this.aa.push(Math.random());
+      // this.aa.splice(2,0,Math.random())
+    },
+    dfs(obj,arr=[]){//深度优先，递归查询=>[1, 2, "2-2", 3, "3-3", 4, "4-4"]
+      if(obj){
+          arr.push(obj.name);
+          let c=obj.c;
+          for(let i=0;i<c.length;i++){
+            this.dfs(c[i],arr)
+          }
+        }
+        return arr;
+    },
+    bfs(obj,stack=[],nodes=[]){//广度优先，按照先进先出的顺序添加=>[1, 2, 3, 4, "2-2", "3-3", "4-4"]
+      if(obj){
+        stack.push(obj)
+          while(stack.length){
+            const item=stack.shift();
+            nodes.push(item.name)
+            let c=item.c;
+            for(let i=0;i<c.length;i++){
+              stack.push(c[i])
+            }
+          }
+        return nodes;
+      }
+    }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.animate {
+  display:block;
+  width: 350px;
+  /* margin-bottom: 20px;
+  color: #fff;
+  background: #2e8b57;
+  border-radius: 3px;
+  -webkit-animation: animate 5s infinite;
+  animation: animate 5s infinite; */
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+@keyframes animate {
+  0% {
+    width: 50px;
+  }
+  100% {
+    width: 300px;
+  }
 }
 </style>
